@@ -2,6 +2,13 @@ package supporter
 
 import "reflect"
 
+// InArray returns true if the value is in the array
+// Example:
+// 		// Output: true
+// 		fmt.Println(supporter.InArray(1, []int{1, 2, 3}))
+//
+// 		// Output: false
+// 		fmt.Println(supporter.InArray(4, []int{1, 2, 3}))
 func InArray(val interface{}, array interface{}) bool {
 	switch reflect.TypeOf(array).Kind() {
 	case reflect.Slice:
@@ -17,6 +24,10 @@ func InArray(val interface{}, array interface{}) bool {
 	return false
 }
 
+// First returns the first element of the array
+// Example:
+// 		// Output: 1
+// 		fmt.Println(supporter.First([]int{1, 2, 3}))
 func First(val interface{}) interface{} {
 	if IsEmpty(val) {
 		return nil
@@ -42,6 +53,7 @@ func First(val interface{}) interface{} {
 	return nil
 }
 
+// ToSlice converts the value to slice
 func ToSlice(slice interface{}) []interface{} {
 	s := reflect.ValueOf(slice)
 	if s.Kind() != reflect.Slice {

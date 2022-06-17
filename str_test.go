@@ -38,6 +38,20 @@ func Test_IsEmpty(t *testing.T) {
 			want: true,
 		},
 		{
+			name: "IsEmpty_empty_string_with_space",
+			args: args{
+				val: " ",
+			},
+			want: true,
+		},
+		{
+			name: "IsEmpty_empty_bool",
+			args: args{
+				val: false,
+			},
+			want: true,
+		},
+		{
 			name: "IsEmpty_empty_slice",
 			args: args{
 				val: []interface{}{},

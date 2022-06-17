@@ -7,11 +7,33 @@ import (
 	"reflect"
 	"regexp"
 	"strconv"
+	"strings"
 	"time"
 	"unsafe"
 )
 
 // IsEmpty check if the value is empty
+// Example:
+// 		// Output: true
+// 		fmt.Println(IsEmpty(""))
+//
+// 		// Output: true
+// 		fmt.Println(IsEmpty(" "))
+//
+// 		// Output: false
+// 		fmt.Println(IsEmpty("a"))
+//
+// 		// Output: false
+// 		fmt.Println(IsEmpty(1))
+//
+// 		// Output: true
+// 		fmt.Println(IsEmpty(0))
+//
+// 		// Output: true
+// 		fmt.Println(IsEmpty(nil))
+//
+// 		// Output: true
+// 		fmt.Println(IsEmpty(false))
 func IsEmpty(val interface{}) bool {
 	if val == nil {
 		return true
@@ -21,7 +43,8 @@ func IsEmpty(val interface{}) bool {
 	reflectKind := reflectValue.Kind()
 
 	if reflectKind == reflect.String {
-		return reflectValue.Len() == 0
+		// Trim space
+		return strings.TrimSpace(val.(string)) == ""
 	}
 
 	if reflectKind == reflect.Slice {
@@ -48,7 +71,7 @@ func IsNotEmpty(val interface{}) bool {
 // Example:
 // 		pattern := "^(?P<name>\\w+)\\s(?P<age>\\d+)$"
 // 		text := "John 23"
-// 		matched := MatchGroupsAllSub(pattern, text)
+// 		matched := supporter.MatchGroupsAllSub(pattern, text)
 // 		fmt.Println(matched)
 // 		// Output: map[name: []string{"John"} age: []string{"23"}]
 func MatchGroupsAllSub(pattern string, text string) map[string][]string {
@@ -79,6 +102,14 @@ func MatchGroupsAllSub(pattern string, text string) map[string][]string {
 	return matched
 }
 
+// MatchGroups match groups and get first matched value
+// Example:
+// 		pattern := "^(?P<name>\\w+)\\s(?P<age>\\d+)$"
+// 		text := "John 23"
+//
+// 		matched := supporter.MatchGroups(pattern, text)
+// 		fmt.Println(matched)
+// 		// Output: map[name: "John" age: "23"]
 func MatchGroups(pattern string, text string) map[string]string {
 	matched := MatchGroupsAllSub(pattern, text)
 
@@ -92,7 +123,10 @@ func MatchGroups(pattern string, text string) map[string]string {
 }
 
 // StrRandom string
-// See at https://stackoverflow.com/questions/22892120/how-to-generate-a-random-string-of-a-fixed-length-in-go
+// @ref: https://stackoverflow.com/questions/22892120/how-to-generate-a-random-string-of-a-fixed-length-in-go
+// Example:
+// 		fmt.Println(supporter.StrRandom(10))
+// 		// Output: string
 func StrRandom(n int) string {
 	var src = rand.NewSource(time.Now().UnixNano())
 	const (

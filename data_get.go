@@ -7,6 +7,34 @@ import (
 )
 
 // DataGet Get an item from an array or object using "dot" notation.
+// Example:
+// 		// Output: "a"
+// 		fmt.Println(supporter.DataGet(map[string]interface{}{"a": "b"}, "a"))
+//
+// 		// Or get a nested value
+// 		person := map[string]interface{}{
+// 			"name": map[string]interface{}{
+// 				"first": "John",
+// 				"last":  "Doe",
+// 			},
+// 			"age": "23",
+//			"phones" : []map[string]interface{}{
+//				{"type": "home", "number": "555-555-5555"},
+//				{"type": "work", "number": "555-666-6666"},
+//			},
+// 		}
+//
+// 		// Output: "John"
+// 		fmt.Println(supporter.DataGet(person, "name.first"))
+//
+// 		// Output: "Doe"
+// 		fmt.Println(supporter.DataGet(person, "name.last"))
+//
+// 		// Output: "23"
+// 		fmt.Println(supporter.DataGet(person, "age"))
+//
+// 		// Output: "555-555-5555"
+// 		fmt.Println(supporter.DataGet(person, "phones.0.number"))
 func DataGet(target interface{}, key string, defaultValues ...interface{}) (value interface{}) {
 
 	value = nil
