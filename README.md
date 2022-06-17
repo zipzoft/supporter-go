@@ -74,3 +74,29 @@ fmt.Println(supporter.DataGet(target, "name"))
 fmt.Println(supporter.DataGet(target, "developers.1.age"))
 ```
 
+
+### Collection 
+
+```go
+import (
+    "github.com/zipzoft/supporter-go/collection"
+    "github.com/zipzoft/supporter-go/collection/pipe"
+)
+
+items := []string{"a", "b", "c"}
+
+_collection := collection.NewPipeline(items)
+
+_collection.Pipe(
+    pipe.Filter(func(item interface{}) bool {
+        return item.(string) == "b"
+    }),
+
+    pipe.Map(func(item interface{}) interface{} {
+        return item.(string) + "!"
+    }),
+)
+
+// Output: []string{"b!"}
+output, err := _collection.Get()
+```
