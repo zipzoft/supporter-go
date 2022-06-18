@@ -42,12 +42,8 @@ func DataGet(target interface{}, key string, defaultValues ...interface{}) (valu
 		value = defaultValues[0]
 	}
 
-	if IsEmpty(key) {
+	if IsEmpty(key) || IsEmpty(target) {
 		return target
-	}
-
-	if IsEmpty(target) {
-		return value
 	}
 
 	keys := strings.Split(key, ".")
@@ -60,32 +56,17 @@ func DataGet(target interface{}, key string, defaultValues ...interface{}) (valu
 				if s.Len() > int(index) {
 					return DataGet(s.Index(int(index)).Interface(), strings.Join(keys[1:], "."), value)
 				}
-
-				return value
 			}
 
 			return value
 		}
 	}
 
-	switch target.(type) {
+	if reflect.TypeOf(target).Kind() == reflect.Map {
+		m := reflect.ValueOf(target)
 
-	case *map[string]interface{}:
-		return DataGet(*target.(*map[string]interface{}), key, value)
-
-	case map[string]interface{}:
-		for _, segment := range keys {
-			value = target.(map[string]interface{})[segment]
-
-			if len(keys) > 1 {
-				if IsEmpty(defaultValues) {
-					return DataGet(value, strings.Join(keys[1:], "."))
-				}
-
-				return DataGet(value, strings.Join(keys[1:], "."), defaultValues...)
-			}
-
-			return value
+		if m.MapIndex(reflect.ValueOf(keys[0])).IsValid() {
+			return DataGet(m.MapIndex(reflect.ValueOf(keys[0])).Interface(), strings.Join(keys[1:], "."), value)
 		}
 	}
 
