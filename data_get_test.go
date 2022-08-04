@@ -199,6 +199,25 @@ func Test_DataGet(t *testing.T) {
 			},
 			want: nil,
 		},
+		{
+			name: "DataGet_index_in_slice",
+			args: args{
+				target: map[string]interface{}{
+					"test": []interface{}{
+						map[string]interface{}{
+							"test2": 1,
+						},
+						map[string]interface{}{
+							"test2": 2,
+						},
+					},
+				},
+				key: "test.1",
+			},
+			want: map[string]interface{}{
+				"test2": 2,
+			},
+		},
 	}
 
 	for _, tt := range tests {

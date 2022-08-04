@@ -2,7 +2,6 @@ package supporter
 
 import (
 	crypto_rand "crypto/rand"
-	"fmt"
 	"math/rand"
 	"reflect"
 	"regexp"
@@ -85,8 +84,6 @@ func MatchGroupsAllSub(pattern string, text string) map[string][]string {
 	groups := re.SubexpNames()
 	matches := re.FindAllStringSubmatch(text, -1)
 
-	fmt.Println(groups, matches)
-
 	for groupIdx, group := range groups {
 		if group == "" {
 			continue
@@ -116,7 +113,9 @@ func MatchGroups(pattern string, text string) map[string]string {
 	paramMap := make(map[string]string)
 
 	for name, strings := range matched {
-		paramMap[name] = First(strings).(string)
+		if val, ok := First(strings).(string); ok {
+			paramMap[name] = val
+		}
 	}
 
 	return paramMap
