@@ -69,4 +69,68 @@ func TestCollection(t *testing.T) {
 			}
 		}
 	})
+
+	t.Run("Collection with Find pipe", func(t *testing.T) {
+		pipeline := collection.NewPipeline([]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10})
+		expected := 6
+		pipeline.Pipe(
+			pipe.Find(func(i interface{}, key interface{}) bool {
+				return i.(int) == 6
+			}),
+		)
+
+		data, err := pipeline.Get()
+		if err != nil {
+			t.Error(err)
+		}
+
+		// Convert interface to int
+		item := data.(int)
+
+		if item != expected {
+			t.Errorf("Expected %v, got %v", expected, item)
+		}
+	})
+
+	t.Run("Collection with Reduce pipe", func(t *testing.T) {
+		pipeline := collection.NewPipeline([]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10})
+		expected := 55
+		pipeline.Pipe(
+			pipe.Reduce(func(carry interface{}, item interface{}) interface{} {
+				return carry.(int) + item.(int)
+			}, 0),
+		)
+
+		data, err := pipeline.Get()
+		if err != nil {
+			t.Error(err)
+		}
+
+		// Convert interface to int
+		item := data.(int)
+
+		if item != expected {
+			t.Errorf("Expected %v, got %v", expected, item)
+		}
+	})
+
+	t.Run("Collection with first pipe", func(t *testing.T) {
+		pipeline := collection.NewPipeline([]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10})
+		expected := 1
+		pipeline.Pipe(
+			pipe.First(),
+		)
+
+		data, err := pipeline.Get()
+		if err != nil {
+			t.Error(err)
+		}
+
+		// Convert interface to int
+		item := data.(int)
+
+		if item != expected {
+			t.Errorf("Expected %v, got %v", expected, item)
+		}
+	})
 }
