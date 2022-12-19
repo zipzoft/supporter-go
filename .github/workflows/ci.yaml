@@ -1,12 +1,6 @@
 name: "Testing"
 
-on:
-  push:
-    branches:
-      - "master"
-  pull_request:
-    branches:
-      - "master"
+on: [push, pull_request]
 
 jobs:
   tests:
@@ -14,7 +8,12 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        go: ["1.17", "1.18"]
+        go: ["1.18", "1.19"]
+        include:
+          - go: "1.18"
+            analysis: true
+          - go: "1.19"
+            analysis: true
     name: GO ${{ matrix.go }}
 
     steps:
@@ -23,7 +22,7 @@ jobs:
         with:
           go-version: "${{ matrix.go }}"
       - name: Set up gotestfmt
-        uses: haveyoudebuggedit/gotestfmt-action@v2
+        uses: GoTestTools/gotestfmt-action@v2
 
       # Alternatively, install using go install
       - name: Set up gotestfmt
